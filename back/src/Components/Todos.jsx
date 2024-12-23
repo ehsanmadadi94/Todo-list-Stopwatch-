@@ -5,13 +5,19 @@ import NewTodoInput from "./NewTodoInput";
 
 
 export default function Todos() {
-
-    const [ todos , setTodos ] = useState([]);
-
-    useEffect(()=>{
-        setTodos(JSON.parse(localStorage.getItem('Todo_List'))?? [])
-    },[])
-
+    const [ todos , setTodos ] = useState([
+        {
+            id:uuidv4(),
+            title : 'go to school and read books',
+            status: false
+        },
+        {
+            id:uuidv4(),
+            title : 'go to gym at 17:00',
+            status : true
+        }
+    ]);
+    
 
     const UpdateTodos = (state)=>{
         let deletestate=[]
@@ -51,10 +57,10 @@ export default function Todos() {
                 status : false,
             }
         ])
-
+        localStorage.setItem(TodoTitle , false)
     }
     useEffect(()=>{
-        localStorage.setItem('Todo_List', JSON.stringify(todos))
+        console.log('todos updated')
     },[todos])
 
     return (
