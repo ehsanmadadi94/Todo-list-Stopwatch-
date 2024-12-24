@@ -1,22 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TodoList from "./TodoList";
 import { v4 as uuidv4 } from 'uuid';
 import NewTodoInput from "./NewTodoInput";
 
 
 export default function Todos() {
-    const [ todos , setTodos ] = useState([
-        {
-            id:uuidv4(),
-            title : 'go to school and read books',
-            status: false
-        },
-        {
-            id:uuidv4(),
-            title : 'go to gym at 17:00',
-            status : true
-        }
-    ]);
+
+    const [ todos , setTodos ] = useState([]);
+
+    useEffect(()=>{
+        setTodos(JSON.parse(localStorage.getItem('Todo_List'))?? [])
+    },[])
+
     
 
     const UpdateTodos = (state)=>{
@@ -57,10 +52,10 @@ export default function Todos() {
                 status : false,
             }
         ])
-        localStorage.setItem(TodoTitle , false)
+
     }
     useEffect(()=>{
-        console.log('todos updated')
+        localStorage.setItem('Todo_List', JSON.stringify(todos))
     },[todos])
 
     return (
