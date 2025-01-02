@@ -1,5 +1,4 @@
 import Todos from "./Components/Todos"
-import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
 

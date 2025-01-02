@@ -3,7 +3,6 @@ import TodoList from "./TodoList";
 import { v4 as uuidv4 } from 'uuid';
 import NewTodoInput from "./NewTodoInput";
 import Stopwatch from "./Stopwatch";
-import { ToastContainer, toast } from 'react-toastify';
 
 
 export default function Todos() {
@@ -17,12 +16,11 @@ export default function Todos() {
             let todos = await res.json();
             if(res.ok){
                 setTodos(todos)
-                toast.success(`You're ready to go 😉`)
             }else{
-                toast.error('Error while retrieving list.')
+                alert('Error while retrieving list.')
             }
         } catch (error) {
-            toast.error(error)
+            console.log(error)
         }
     }
     useEffect(()=>{
@@ -32,84 +30,48 @@ export default function Todos() {
 
 
 
-    const UpdateTodos = async(state)=>{
-        let url = 'https://67715df42ffbd37a63cee29e.mockapi.io/todos'+'/'+state
+    const UpdateTodos = (state)=>{
+        let deletestate=[]
+        deletestate = todos.filter((item)=>item.id!==state)
+        setTodos(deletestate)
+    }
+    const deleteData = async () => {
         try {
-            let res = await fetch(url,{
-                method: 'DELETE',
-                headers: {'content-type':'application/json'},
-            });
-            let todosToDelete = await res.json();
+            let res = await fetch('https://67715df42ffbd37a63cee29e.mockapi.io/todos');
+            let todos = await res.json();
             if(res.ok){
-                let deletestate=[]
-                deletestate = todos.filter((item)=>item.id!==todosToDelete.id)
-                setTodos(deletestate)
+                console.log(todos)
             }else{
-                toast.error('Error while retrieving list.')
+                alert('Error while retrieving list.')
             }
         } catch (error) {
-            toast.error(error)
+            console.log(error)
         }
     }
-
-    const ChangeStatus=async(changeStaus)=>{
-
-        // let TodosChangesStatus=todos.map((todoItem)=>{
-        //     if(changeStaus.id===todoItem.id){
-        //         todoItem.status=!todoItem.status
-        //     }
-        //     return todoItem
-        // })
-        // setTodos(TodosChangesStatus);
-        let url = 'https://67715df42ffbd37a63cee29e.mockapi.io/todos'+'/'+changeStaus.id;
-        try {
-            let res = await fetch(url,{
-                method:'put',
-                headers: {'content-type':'application/json'},
-                body:JSON.stringify({status:!changeStaus.status})
-            })
-            let todoData=await res.json();
-            if(res.ok){
-                setTodos([todoData])
-            }else{
-                toast.error('Error while retrieving list.')
+    const ChangeStatus=(changeStaus)=>{
+        deleteData()
+        let TodosChangesStatus=todos.map((todoItem)=>{
+            if(changeStaus.id===todoItem.id){
+                todoItem.status=!todoItem.status
             }
-        } catch (error) {
-            toast.error(error)
-        }
+            return todoItem
+        })
+        setTodos(TodosChangesStatus);
     }
-    const editTodoTitleHandler=async(todo,newTitle)=>{
-        // let newTodos=todos.map((todoItem)=>{
-        //     if(todoItem.id===todo.id){
-        //         todoItem.title=newTitle;
-        //         return todoItem
-        //     }
-
-        // })
-        // setTodos(newTodos);
-        let url = 'https://67715df42ffbd37a63cee29e.mockapi.io/todos'+'/'+todo.id;
-        try {
-            let res = await fetch(url,{
-                method:'put',
-                headers: {'content-type':'application/json'},
-                body:JSON.stringify({title:newTitle})
-            })
-            let todoData=await res.json();
-            if(res.ok){
-                setTodos([todoData])
-            }else{
-                toast.error('Error while retrieving list.')
+    const editTodoTitleHandler=(todo,newTitle)=>{
+        let newTodos=todos.map((todoItem)=>{
+            if(todoItem.id===todo.id){
+                todoItem.title=newTitle;
             }
-        } catch (error) {
-            toast.error(error)
-        }
-
+            return todoItem
+        })
+        setTodos(newTodos);
     }
 
 
     const ToggleMode=()=>{
         todoMode ? setTodoMode(false) : setTodoMode(true);
-        !todoMode ? toast.success(`You're in Todo mode 📝`) : toast.success(`You're in StopWatch mode ⏱`)
+        console.log('mode is now '+ todoMode)
     }
 
 

@@ -15,13 +15,13 @@ export default function TodoListItem({todo ,update , changeStatus ,editTodo }) {
         }
     }
 
-    // useEffect(()=>{
-    //     console.log(`${todo.title} is created!`)
+    useEffect(()=>{
+        console.log(`${todo.title} is created!`)
 
-    //     return (()=>{
-    //         console.log(`${todo.title} is deleted!`)
-    //     })
-    // } ,[])
+        return (()=>{
+            console.log(`${todo.title} is deleted!`)
+        })
+    } ,[])
 
     return(
         <li className="relative flex items-center justify-between px-2 py-6 border-b">
