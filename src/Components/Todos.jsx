@@ -1,22 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import TodoList from "./TodoList";
 import { v4 as uuidv4 } from 'uuid';
 import NewTodoInput from "./NewTodoInput";
 import Stopwatch from "./Stopwatch";
 import { ToastContainer, toast } from 'react-toastify';
+import todoReducer from "../Reducers/todosReducer";
 
 
 export default function Todos() {
     const [todoMode , setTodoMode] = useState(true)
 
-    const [ todos , setTodos ] = useState([]);
+    // const [ todos , setTodos ] = useState([]);
+    const [todos , todoDispatcher] = useReducer (todoReducer,[])
 
     const fetchdata = async () => {
         try {
             let res = await fetch('https://67715df42ffbd37a63cee29e.mockapi.io/todos');
             let todos = await res.json();
             if(res.ok){
-                setTodos(todos)
+                todoDispatcher({
+                    type: 'initial-todos',
+                    todos
+                })
                 toast.success(`You're ready to go 😉`)
             }else{
                 toast.error('Error while retrieving list.')
@@ -41,9 +46,11 @@ export default function Todos() {
             });
             let todosToDelete = await res.json();
             if(res.ok){
-                let deletestate=[]
-                deletestate = todos.filter((item)=>item.id!==todosToDelete.id)
-                setTodos(deletestate)
+                todoDispatcher({
+                    type:'delete',
+                    id:state
+                })
+                toast.success('todo deleted!')
             }else{
                 toast.error('Error while retrieving list.')
             }
@@ -70,7 +77,11 @@ export default function Todos() {
             })
             let todoData=await res.json();
             if(res.ok){
-                setTodos([todoData])
+                todoDispatcher({
+                    type: 'toggle',
+                    id:changeStaus.id
+                })
+                toast.success("Done!")
             }else{
                 toast.error('Error while retrieving list.')
             }
@@ -96,7 +107,12 @@ export default function Todos() {
             })
             let todoData=await res.json();
             if(res.ok){
-                setTodos([todoData])
+                todoDispatcher({
+                    type : 'edit',
+                    id: todo.id,
+                    newTitle: newTitle
+                })
+                toast.success('Todo title changed.')
             }else{
                 toast.error('Error while retrieving list.')
             }
@@ -128,10 +144,18 @@ export default function Todos() {
                 body:JSON.stringify(newTodo)
             })
             let todoData=await res.json();
-            setTodos([
-                ...todos,
-                todoData
-            ])
+            // setTodos([
+            //     ...todos,
+            //     todoData
+            // ])
+            if(res.ok){
+                todoDispatcher({
+                    type: 'add',
+                    id: todoData ?.id,
+                    title : todoData ?. title
+                })
+                toast.success('New Todo Created!')
+            }
         } catch (error) {
             console.log(error)
         }
