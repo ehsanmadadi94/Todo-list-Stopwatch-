@@ -1,21 +1,24 @@
 import { useContext, useEffect, useState } from "react";
 import DeleteIcon from "./Icons/DeleteIcon";
 import EditIcon from "./Icons/EditIcon";
-import { TodoContext } from "../Contexts/TodoContext";
+import { UserContext } from "../Contexts/UserContext";
 
-export default function TodoListItem({todo }) {
-    const {todos , UpdateTodos,ChangeStatus,editTodoTitleHandler} = useContext(TodoContext)
+export default function TodoListItem({todo ,update , changeStatus ,editTodo }) {
     const [editMode , setEditMode]=useState(false)
     const changeTodoHandler=()=>{
-        UpdateTodos(todo?.id)
+        update(todo?.id)
 
     }
     const editTodoHandler=(event)=>{
         if(event.key === 'Enter'){
-            editTodoTitleHandler(todo, event.target.value)
+            editTodo(todo, event.target.value)
             setEditMode(false)
         }
     }
+    const user = useContext(UserContext)
+    console.log(user)
+    user.name ='alo alo alo'
+    console.log(user)
     // useEffect(()=>{
     //     console.log(`${todo.title} is created!`)
 
@@ -34,7 +37,7 @@ export default function TodoListItem({todo }) {
                         </div>
                         : <div className="flex items-center">
                             <div>
-                        <input  type="checkbox" checked={todo?.status} onChange={()=>{}} onClick={()=>ChangeStatus(todo)} className="" />
+                        <input  type="checkbox" checked={todo?.status} onChange={()=>{}} onClick={()=>changeStatus(todo)} className="" />
                         <p  className={`inline-block mt-1 ml-2 text-gray-600 ${todo?.status? 'line-through' : ''}`}>{todo?.title}</p>
                         </div>
                         <button type="button" className="absolute right-0 flex items-center space-x-1" >

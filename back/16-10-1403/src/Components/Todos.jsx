@@ -5,8 +5,6 @@ import NewTodoInput from "./NewTodoInput";
 import Stopwatch from "./Stopwatch";
 import { ToastContainer, toast } from 'react-toastify';
 import todoReducer from "../Reducers/todosReducer";
-import { TodoContext } from './../Contexts/TodoContext.js'
-
 
 
 export default function Todos() {
@@ -32,11 +30,12 @@ export default function Todos() {
             toast.error(error)
         }
     }
-
     useEffect(()=>{
         // setTodos(JSON.parse(localStorage.getItem('Todo_List'))?? [])
         fetchdata()
     },[])
+
+
 
     const UpdateTodos = async(state)=>{
         let url = 'https://67715df42ffbd37a63cee29e.mockapi.io/todos'+'/'+state
@@ -90,7 +89,6 @@ export default function Todos() {
             toast.error(error)
         }
     }
-
     const editTodoTitleHandler=async(todo,newTitle)=>{
         // let newTodos=todos.map((todoItem)=>{
         //     if(todoItem.id===todo.id){
@@ -124,10 +122,15 @@ export default function Todos() {
 
     }
 
+
     const ToggleMode=()=>{
         todoMode ? setTodoMode(false) : setTodoMode(true);
         !todoMode ? toast.success(`You're in Todo mode 📝`) : toast.success(`You're in StopWatch mode ⏱`)
     }
+
+
+
+
 
     const addNewTodoHandler = async (TodoTitle) => {
         let newTodo ={
@@ -176,10 +179,7 @@ export default function Todos() {
                         <h1 className="mr-6 text-4xl font-bold text-purple-600"> TO DO APP</h1>
                     </div>
                     <NewTodoInput  addTodo={addNewTodoHandler}/>
-                    {/* <TodoList todos={todos} update={UpdateTodos} changeStatus={ChangeStatus} editTodo={editTodoTitleHandler} /> */}
-                    <TodoContext.Provider value={{todos , UpdateTodos,ChangeStatus,editTodoTitleHandler}}>
-                        <TodoList />
-                    </TodoContext.Provider>
+                    <TodoList todos={todos} update={UpdateTodos} changeStatus={ChangeStatus} editTodo={editTodoTitleHandler} />
                     </div>
                     :
                     <Stopwatch />
