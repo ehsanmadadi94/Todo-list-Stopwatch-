@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { TodoContext } from "../Contexts/TodoContext";
 
 export default function TodoList() {
-   const {todos , UpdateTodos,ChangeStatus,editTodoTitleHandler} = useContext(TodoContext)
+   const {todos} = useContext(TodoContext)
     return(
         <ul className="list-reset">
 
